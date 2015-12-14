@@ -54,16 +54,23 @@ public class HandleASession implements Runnable {
     }
 
     private void handleInput(DataInputStream fromPlayer) {
+        System.out.println("Trying to handle input");
         try {
-            if(fromPlayer.readInt() == 1) {
+            int nextInt = fromPlayer.readInt();
+            System.out.println(nextInt);
+            if(nextInt == 1) {
+                
                 isRight = true;
             }
+            System.out.println("succes handle input");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        System.out.println("succes handle input");
     }
 
     private void upDateWolrd() {
+        System.out.println("Update world");
         if(isRight) {
             xPosition ++;
         }
@@ -71,7 +78,9 @@ public class HandleASession implements Runnable {
 
     private void handleOutput() {
         try {
+            System.out.println("x.Position from handle " + xPosition);
             toPlayer.writeInt(xPosition);
+            System.out.println("Written");
         } catch (IOException ex) {
             ex.printStackTrace();
         }
