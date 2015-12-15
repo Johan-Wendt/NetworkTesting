@@ -41,7 +41,7 @@ public class MoveRectangleNetwork extends Application implements MoveRectangleCo
         
         new Thread( () -> {
             try {
-                ServerSocket serverSocket = new ServerSocket(8016);
+                ServerSocket serverSocket = new ServerSocket(8028);
                 Platform.runLater(() -> log.appendText(new Date() + ": ServerSocket started at socket 8000\n"));
 
                 

@@ -39,7 +39,7 @@ public class HandleASession implements Runnable {
             fromPlayer = new DataInputStream(player.getInputStream());
             toPlayer = new DataOutputStream(player.getOutputStream());
             
-            toPlayer.write(1);
+            toPlayer.writeInt(1);
             
             while(true) {
                 System.out.println("Called");

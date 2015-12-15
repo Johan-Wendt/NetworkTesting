@@ -32,9 +32,9 @@ public class MoveRectangleClient extends Application {
     private DataInputStream fromServer;
     private DataOutputStream toServer;
     
-    private Rectangle rectangle = new Rectangle(20, 20);
+    private Rectangle rectangle = new Rectangle(100, 100, 20, 20);
     
-    private int movingDirection = 1;
+    private int movingDirection = 0;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -46,22 +46,29 @@ public class MoveRectangleClient extends Application {
         connectToServer();
         
         rectangle.setFill(Color.RED);
-        rectangle.setTranslateY(200);
+        
         pane.getChildren().add(rectangle);
+        rectangle.setTranslateY(200);
+        rectangle.setTranslateX(100);
         
         scene.setOnKeyPressed(e -> {
-            System.out.println("Pressed");
+            try {
+                System.out.println("sending movingDirection: " + movingDirection);
+                toServer.writeInt(movingDirection);
+            } catch (IOException ex) {
+                Logger.getLogger(MoveRectangleClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
             movingDirection = 1;
         });
         scene.setOnKeyReleased(e -> {
-            movingDirection = 1;
+            movingDirection = 0;
         });
     
     }
 
     private void connectToServer() {
         try {
-            Socket socket = new Socket("localhost", 8016);
+            Socket socket = new Socket("localhost", 8028);
             
             fromServer = new DataInputStream(socket.getInputStream());
             
@@ -77,16 +84,21 @@ public class MoveRectangleClient extends Application {
                 
                 try {
                     int apa = fromServer.readInt();
-                    System.out.println("From server " + apa);
+                 //   System.out.println("From server " + apa);
                     setPostion(apa);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                try {
-                    changeDirection();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+          //      try {
+            //        changeDirection();
+              //  } catch (IOException ex) {
+             //       ex.printStackTrace();
+             //   }
+    //            try {
+      //              Thread.sleep(5);
+        //        } catch (InterruptedException ex) {
+          //          Logger.getLogger(MoveRectangleClient.class.getName()).log(Level.SEVERE, null, ex);
+            //    }
             }
 
         }).start();
@@ -99,11 +111,11 @@ public class MoveRectangleClient extends Application {
     }
 
     private void setPostion(int readInt) {
-        System.out.println(readInt);
+        System.out.println("set Translate" + readInt);
         rectangle.setTranslateX(readInt);
     }
     private void changeDirection() throws IOException {
-        System.out.println("Changing direction" + movingDirection);
-        toServer.write(movingDirection);
+      //  System.out.println("Changing direction" + movingDirection);
+        toServer.writeInt(movingDirection);
     }
 }
